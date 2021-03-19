@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { requestUserLogin } from "../../api/request";
+import LoadingIconSmall from "../Loading/LoadingIconSmall";
 
 function Login({ setUserToken, setUserId }) {
   let history = useHistory();
@@ -11,6 +12,7 @@ function Login({ setUserToken, setUserId }) {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
 
   const fetchLogin = (e) => {
@@ -23,10 +25,14 @@ function Login({ setUserToken, setUserId }) {
           setUserToken(res.token);
           setUserId(res.userId);
           history.replace(from);
-        } else setLoginErrorMessage(res.err);
+        } else {
+          setLoginErrorMessage(res.err);
+          setIsLoading(false);
+        }
       })
       .catch((err) => {
         setLoginErrorMessage("Invalid email or password");
+        setIsLoading(false);
       });
   };
 
@@ -36,7 +42,7 @@ function Login({ setUserToken, setUserId }) {
         <form
           className="p-3 border more-rounded col-md d-flex flex-column justify-content-center shadow"
           onSubmit={(e) => fetchLogin(e)}
-        > 
+        >
           <h4 className="text-center">User Login</h4>
           <label className="form-label">Email</label>
           <input
@@ -49,8 +55,17 @@ function Login({ setUserToken, setUserId }) {
             className="form-control more-rounded"
             onChange={(e) => setPasswordInput(e.target.value)}
           />
-          <button className="btn btn-primary more-rounded w-100 my-2">
-            Login
+          <button
+            className="btn btn-primary more-rounded w-100 my-2"
+            onClick={() => setIsLoading(true)}
+            style={{ height: "50px" }}
+          >
+            {isLoading ? (
+              
+                <LoadingIconSmall />
+            ) : (
+              "Login"
+            )}
           </button>
           {loginErrorMessage && (
             <div className="alert alert-danger text-center text-danger">

@@ -23,7 +23,7 @@ function App() {
   
   return (
     <UserIdContext.Provider value={userId}>
-      <div className="fluid-container">
+      <div className="fluid-container max-vh-100">
         <Router>
           <Switch>
             <Route path="/login">

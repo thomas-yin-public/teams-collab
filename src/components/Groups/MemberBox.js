@@ -5,6 +5,7 @@ import { postGroupMember } from "../../api/post";
 import { requestAllUserBasicInfo } from "../../api/request";
 import ToolBox from "../Common/ToolBox";
 import { GroupUpdateContext } from "../Loading/GroupLoading";
+import LoadingIcon from "../Loading/LoadingIcon";
 
 function MemberBox({ memberList }) {
   const [selectedComponent, setSelectedComponent] = useState("");
@@ -72,7 +73,6 @@ function RemoveMemberForm({ memberList: _memberList }) {
   };
 
   useEffect(() => {
-    console.log(_memberList);
     setMemberList(_memberList);
   }, [_memberList]);
 
@@ -133,6 +133,8 @@ function AddUserForm({ memberList }) {
   let { getGroupMemberList } = useContext(GroupUpdateContext);
   const [userSuggestList, setUserSuggestList] = useState([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const [submitResponse, setSubmitResponse] = useState("");
   const [userSuggestFilterList, setUserSuggestFilterList] = useState([]);
   const [filterInput, setFilterInput] = useState("");
@@ -162,6 +164,7 @@ function AddUserForm({ memberList }) {
       }
       let list = res.filter((user) => !userHash[user._id]);
       setUserSuggestList(list);
+      setIsLoading(false);
     });
   };
 
@@ -199,46 +202,30 @@ function AddUserForm({ memberList }) {
           className="m-0 p-0"
           style={{ height: "50vh", overflowX: "hidden", overflowY: "auto" }}
         >
-          {userSuggestFilterList.map((user) => (
-            <div
-              key={user._id}
-              className="row mt-1 border more-rounded"
-            >
-              <div className="col-md">{user.username}</div>
-              <div className="col-md">{user.email}</div>
-              <div className="col-md-2">
-                <button
-                  className="btn btn-primary"
-                  onClick={(e) => addMember(e, user._id)}
-                >
-                  Add
-                </button>
+          {isLoading ? (
+            <LoadingIcon />
+          ) : (
+            userSuggestFilterList.map((user) => (
+              <div
+                key={user._id}
+                className="row w-100 p-0 m-0 mt-1 border more-rounded d-flex
+                 flex-row justify-content-center align-items-center"
+              >
+                <div className="col-md ">{user.username}</div>
+                <div className="col-md ">{user.email}</div>
+                <div className="col-md-2 ">
+                  <button
+                    className="btn btn-primary"
+                    onClick={(e) => addMember(e, user._id)}
+                  >
+                    Add
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
-      {/* <div className="row">
-        <div className="col-md">Username</div>
-        <div className="col-md">Email address</div>
-        <div className="col-md-2"></div>
-      </div> */}
-      {/* <div className="m-0 p-0" style={{ height: "50vh", overflowY: "auto" }}>
-        {userSuggestFilterList.map((user) => (
-          <div key={user._id} className="row m-0 p-0 mt-4 border more-rounded" style={{height: ""}}>
-            <div className="col-md p-0 m-0">{user.username}</div>
-            <div className="col-md p-0 m-0">{user.email}</div>
-            <div className="col-md-2 p-0 m-0">
-              <button
-                className="btn btn-primary"
-                onClick={(e) => addMember(e, user._id)}
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 }

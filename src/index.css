@@ -118,3 +118,35 @@ a {
     transform: scale(1.0);
   }
 }
+
+.loading-container-sm {
+  width: 80px;
+  /* height: 100vh; */
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-circle-sm {
+  height: 10px;
+  width: 10px;
+  margin: auto;
+  border-radius: 30px;
+  background-color: rgb(255, 255, 255);
+}
+
+@keyframes gradient-color-sm {
+  0% {
+    background-color: rgb(255, 255, 255);
+  }
+
+  50% {
+    background-color: rgba(197, 197, 197, 0.425);
+  }
+
+  100% {
+    bbackground-color: rgb(255, 255, 255);
+  }
+}
