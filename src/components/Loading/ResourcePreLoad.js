@@ -2,7 +2,6 @@ import React, {
   createContext,
   useContext,
   useEffect,
-  useLayoutEffect,
   useState,
 } from "react";
 import { wsserverURL } from "../../api/backendURL";
@@ -22,6 +21,8 @@ export const ForceReload = createContext("");
 
 export const WebSocketContext = createContext();
 
+const ws = new WebSocket(wsserverURL);
+
 function ResourcePreLoad({ children }) {
   const userId = useContext(UserIdContext);
 
@@ -30,8 +31,6 @@ function ResourcePreLoad({ children }) {
   const [groupData, setGroupData] = useState();
   const [chatData, setChatData] = useState();
   const [taskData, setTaskData] = useState();
-
-  const ws = new WebSocket(wsserverURL);
 
   ws.onopen = () => {
     ws.send(JSON.stringify({ userId, action: "REGISTER" }));
@@ -44,11 +43,11 @@ function ResourcePreLoad({ children }) {
   };
 
   const unsafeMessageUpdate = ({ chatId, userId: senderId, message }) => {
-    if (chatData[userId]) {
+    if (chatData[senderId] !== undefined || chatData[senderId] !== null) {
       let newDataList = chatData;
-      newDataList[chatId].messages = [
-        { _id: new Date().getTime(), senderId, message },
-        ...newDataList[chatId].messages,
+      newDataList[senderId].messages = [
+        { _id: new Date().getTime(), senderId, message, sendAt: new Date().getTime() },
+        ...newDataList[senderId].messages,
       ];
       setChatData({ ...newDataList });
     } else {

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { postMessage } from "../../api/post";
 import { UserIdContext } from "../../App";
 import { betterTime } from "../../utilities/betterDate";
@@ -45,6 +45,11 @@ function ChatDisplay({ contactUserChatData, className }) {
     });
   };
 
+  useEffect(() => {
+    let chatdisplay = document.getElementById("chatdisplay")
+    chatdisplay.scrollTo(0, chatdisplay.scrollHeight)
+  }, [contactUserChatData, tmpMessageHolder])
+
   return (
     <div className={`${className} overflow-hidden m-0 p-0 shadow-left`}>
       <h3
@@ -54,6 +59,7 @@ function ChatDisplay({ contactUserChatData, className }) {
         {contactUserChatData.contactUser.username}
       </h3>
       <div
+        id="chatdisplay"
         className="overflow-auto px-3 py-2 d-flex flex-column-reverse"
         style={{ height: "82%" }}
       >
