@@ -22,15 +22,18 @@ function ChatDisplay({ contactUserChatData, className }) {
     let receiverId = contactUserChatData.contactUser._id;
     setMessageInput("");
     setTmpMessageHolder([...tmpMessageHolder, messageInput]);
-    ws.send(
-      JSON.stringify({
-        userId,
-        receiverId,
-        action: "NEW_CHAT_MESSAGE",
-        message: messageInput,
-        chatId: contactUserChatData._id,
-      })
-    );
+    // if (ws.readyStatus === ws.OPEN) {
+    if (ws)
+      ws.send(
+        JSON.stringify({
+          userId,
+          receiverId,
+          action: "NEW_CHAT_MESSAGE",
+          message: messageInput,
+          chatId: contactUserChatData._id,
+        })
+      );
+    // }
     postMessage({
       message,
       type: "text",

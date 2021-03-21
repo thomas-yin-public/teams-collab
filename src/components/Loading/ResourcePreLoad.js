@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import backendURL from "../../api/backendURL";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
+import { wsserverURL } from "../../api/backendURL";
+
 import {
   requestUserContactList,
   requestUserGroupList,
@@ -24,20 +31,20 @@ function ResourcePreLoad({ children }) {
   const [chatData, setChatData] = useState();
   const [taskData, setTaskData] = useState();
 
-  const ws = new WebSocket("ws://localhost:8000");
+  const ws = new WebSocket(wsserverURL);
+
   ws.onopen = () => {
     ws.send(JSON.stringify({ userId, action: "REGISTER" }));
   };
 
   ws.onmessage = (data) => {
     let json_data = JSON.parse(data.data);
-    console.log(json_data);
+    // console.log(data);
     unsafeMessageUpdate(json_data);
   };
 
   const unsafeMessageUpdate = ({ chatId, userId: senderId, message }) => {
-    if (chatData[chatId]) {
-      console.log(123);
+    if (chatData[userId]) {
       let newDataList = chatData;
       newDataList[chatId].messages = [
         { _id: new Date().getTime(), senderId, message },

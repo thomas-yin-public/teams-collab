@@ -1,5 +1,4 @@
-import backendURL from "../api/backendURL";
-import serverURL from "../api/backendURL";
+import { serverURL } from "../api/backendURL";
 import { getUserToken } from "./common";
 
 export const postGroupTask = async ({
@@ -84,7 +83,7 @@ export const postMarkChatAsRead = async (chatId, contactUserId) => {
   const userToken = getUserToken();
   if (!userToken || !contactUserId) return;
 
-  return await fetch(`${backendURL}/api/chat/read`, {
+  return await fetch(`${serverURL}/api/chat/read`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

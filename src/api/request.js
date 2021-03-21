@@ -1,4 +1,4 @@
-import serverURL from "../api/backendURL";
+import {serverURL} from "../api/backendURL";
 import { getUserToken } from "./common";
 
 export const requestUserLogin = async (email, password) => {
