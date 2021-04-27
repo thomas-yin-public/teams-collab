@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { postMessage } from "../../api/post";
 import { UserIdContext } from "../../App";
-import { betterTime } from "../../utilities/betterDate";
+import { betterTime, betterTimeDate } from "../../utilities/betterDate";
 import { ChatContext, WebSocketContext } from "../Loading/ResourcePreLoad";
 
 function ChatDisplay({ contactUserChatData, className }) {
@@ -18,6 +18,8 @@ function ChatDisplay({ contactUserChatData, className }) {
   };
 
   const sendMessage = async () => {
+    if (!messageInput) return;
+
     let message = messageInput;
     let receiverId = contactUserChatData.contactUser._id;
     setMessageInput("");
@@ -40,15 +42,20 @@ function ChatDisplay({ contactUserChatData, className }) {
       if (res.success) {
         await getUserContactList();
         setTmpMessageHolder([...tmpMessageHolder].splice(0, 1));
+        scrollToBottom();
       } else {
       }
     });
   };
 
-  useEffect(() => {
+  const scrollToBottom = () => {
     let chatdisplay = document.getElementById("chatdisplay")
     chatdisplay.scrollTo(0, chatdisplay.scrollHeight)
-  }, [contactUserChatData, tmpMessageHolder])
+  }
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [])
 
   return (
     <div className={`${className} overflow-hidden m-0 p-0 shadow-left`}>
@@ -98,7 +105,7 @@ function ChatDisplay({ contactUserChatData, className }) {
                   {msg.message}
                 </span>
                 <sub className="align-self-center mx-1 text-muted">
-                  {betterTime(msg.sendAt)}
+                  {betterTimeDate(msg.sendAt)}
                 </sub>
               </div>
             </div>

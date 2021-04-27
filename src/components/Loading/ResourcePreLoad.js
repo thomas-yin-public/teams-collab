@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { wsserverURL } from "../../api/backendURL";
 
 import {
@@ -43,10 +38,15 @@ function ResourcePreLoad({ children }) {
   };
 
   const unsafeMessageUpdate = ({ chatId, userId: senderId, message }) => {
-    if (chatData[senderId] !== undefined || chatData[senderId] !== null) {
+    if (chatData[senderId] !== undefined) {
       let newDataList = chatData;
       newDataList[senderId].messages = [
-        { _id: new Date().getTime(), senderId, message, sendAt: new Date().getTime() },
+        {
+          _id: new Date().getTime(),
+          senderId,
+          message,
+          sendAt: new Date().getTime(),
+        },
         ...newDataList[senderId].messages,
       ];
       setChatData({ ...newDataList });
